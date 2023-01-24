@@ -5,6 +5,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\PostsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,6 +20,8 @@ use App\Http\Controllers\LogoutController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/posts', [PostsController::class,'index']);
 
 Route::get('/register', [RegisterController::class,'show']);
 
