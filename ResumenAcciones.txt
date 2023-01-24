@@ -1,0 +1,107 @@
+creacion de un proyecto laravel
+
+ 1 composer create-project --prefer-dist laravel/laravel login-laravel
+ 
+ // tuve problemas con el php.ini tue que comentar phpextension y funciono perfecto
+
+ 2 Ejecuto el servidor
+
+ php artisan serve
+ 
+ Vamos creando la base de datos primero y para ello creamos en mysql la base de datos || listas ||
+ en este caso de manera manual
+ Modificamos archivo ENV para conectarnos y gestionarmos en Databse/migrations la migracion users
+ que queremos usar ( le añadi username ) una vez modificado ejecuto el comando 
+ 
+ 3 php artisan migrate
+
+ // Revise en mysql workbench y se creo la tabla users perfectamente
+
+ 4 Cambiar el modelo
+
+ necesitamos que nuestros usuarios introduzcan campos y debemos modifica MODELS/user.php
+ 
+ Le añadimos username y ademas codificamos las contraseñas
+
+ public function setPasswordAttribute($value)
+    {
+        $this->attributes['password']= bcrypt($value);
+    }
+
+ 5 Creamos controladores (los necesarios)
+ 
+ php artisan make:controller RegisterController
+
+ con esto creamos los controladores encargados de manejas las operacion y mostrarlas en las vistas
+ 
+ public function show()
+    {
+        return view('autch-register');
+    }
+ 6 Creamos una request ( nos ayuda a tener una variable request que nos permitira tratar datos
+ en el get o el post de manera eficiente)
+ 
+ php artisan make:request RegisterRequest
+
+ Se crea una nueva carpeta en HTTP/request con esto podemos autorizan o no que una solicitud
+ avance
+
+ 7 Creacion vista en App/routes/web.app para el registro
+
+ Route::get('/register', function () {
+    return view('auth.register');
+ });
+
+ 8 Una vez creada la ruta simplemete creamos un nuevo archico register.blade.php
+ y ahi manejamos la captura de datos
+
+ 9 Routeamos la respuesta del submit para controlar las acciones todo esto en routes/web.php
+
+ Route::post('/register', [RegisterController::class,'register']); con esto le decimos que al hacer
+ post sobre esta paguna llamamos al metro register de la clase RegisterController que nos manejara 
+ este registro
+
+ 10 Creamos tanto el LoginRequest y el Logincontroller y le damos logica a los dos para que
+ uno controle el login y la recojida de campos y el request nos haga un paso intermedio
+ para asi poder logearnos de manera mas eficiente con mail o usuario
+
+ php artisan make:controller LoginController
+ php artisan make:request LoginRequest
+
+ 11 Creamos todas las vistas tanto de Login como de home para ello modifcamos web.php y añadimos
+ todos los enrutamientos
+ 
+ Route::get('/login', [LoginController::class,'show']);
+ Route::post('/login', [LoginController::class,'login']);
+
+ Route::get('/home', [HomeController::class,'show']);
+ 
+ A la vez nos damos cuenta que al logear con exito necesitamos ir a la pantalla home asi que creamos
+ tanto su controlador como su vista
+ 
+ 12 Una vez creado todo el registro vvamos a jugar con el tipo de entrada a nuestra web ( autenticado
+ o no)
+ 
+ para ello desde home.index.php podemos llamar directamente a @auth
+
+ @auth
+      <p>Bievenido {{ auth()->user()->name ?? auth()->user()->username }}, estás autenticado a la página</p>
+ @endauth
+
+ @guest
+      <p>Para ver el contenido <a href="/login">inicia sesión</a></p>
+ @endguest
+
+ 13 Creacion del logout
+ 
+ php artisan make:Controller LogoutController
+
+ Realizamos la logica del controlador y luego su vista en web.app
+
+ 14 Realizamos la vista más eficiente con bootstrap asi he descargado los archivos js y css 
+ compilados de la web oficial y luego creado una carpeta assets en la carpeta public
+ 
+ 15 Configuramos todos la pantalla principal, creamos partials para el menu principal y ademas el
+ navbar /patials/navbar.blade.php y app-master.blade.php
+
+  
